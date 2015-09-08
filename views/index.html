@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="twitterRace">
+<head>
+  <meta charset="UTF-8">
+  <title>Twitter-Race</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script type="text/javascript" src="/js/vendor/jquery-2.1.4.js"></script>
+  <script type="text/javascript" src="/js/vendor/firebase-2.2.2.js"></script>
+  <script type="text/javascript" src="/js/vendor/angular-1.4.5.js"></script>
+  <script type="text/javascript" src="/js/vendor/angularfire-1.1.2.js"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+</head>
+<body ng-controller="MainController as main">
+  <h1>Twitter Race</h1>
+  <form ng-submit="main.sendSearchTerm()">
+    <input type="text" ng-model="main.searchTerm">
+    <button type="submit">Submit</button>
+  </form>
+  <button ng-click="main.stopStream()">Stop</button>
+  <ul id="tweet-container" class="list-unstyled">
+  <li ng-repeat="tweet in main.tweets1">
+      <img ng-src="{{tweet.profile_image_url}}">
+      <div>
+        <span class="full-name"> {{tweet.name}}</span>
+        <span class="username">@{{tweet.screen_name}}</span>
+      </div>
+      <div class="contents"><span class="text">{{tweet.text}}</span></div>
+    </li>
+  </ul>
+</body>
+<script type="text/javascript" src="/js/client_app.js"></script>
+</html>
