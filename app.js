@@ -40,15 +40,15 @@ var twitter = new Twit({
 router.get('/', function(req, res) {
   io.on('connection', function(socket) {
     io.use("transports", ["xhr-polling"]);
-    io.set("polling duration", 20);
+    io.set("polling duration", 25);
     socket.on("stop", function(){
-      console.log("stop received");
-        stream1.stop();
-        stream2.stop();
-        stream1 = null;
-        stream2 = null;
-        currentSearch = null;
-        socket.disconnect(true);
+      stream1.stop();
+      stream2.stop();
+      stream1 = null;
+      stream2 = null;
+      currentSearch = null;
+      // socket.disconnect(true);
+      // socket.close();
     })
 
     socket.on("search", function(searchTerms){

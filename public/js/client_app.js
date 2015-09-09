@@ -119,7 +119,7 @@ function MainController(socket,$http,$window,Score){
   }
 
   self.restart = function(){
-    $window.location.href = "/";
+    $window.location.href = $window.location.hostname;
   }
 
   self.startCountdown = function(){
