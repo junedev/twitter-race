@@ -36,7 +36,7 @@ function Score($firebaseArray,FIREBASE_URL){
   var ref = new Firebase(FIREBASE_URL);
   var scores = $firebaseArray(ref.child("scores"));
   var Score = {};
-  
+
   Score.all = scores;
 
   Score.create = function(score){
@@ -49,8 +49,6 @@ function Score($firebaseArray,FIREBASE_URL){
 
   return Score;
 }
-
-
 
 MainController.$inject = ["socket","$http","$window","Score"]
 
@@ -114,7 +112,6 @@ function MainController(socket,$http,$window,Score){
     }
     self.calc();
   });
-
 
   self.sendSearchTerm = function(){
     socket.emit('search', self.searchTerms);
