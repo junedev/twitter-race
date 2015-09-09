@@ -28,9 +28,19 @@ app.use(sassMiddleware({
   express.static(__dirname + '/public')
 )
 
+var io   = require('socket.io')(server);
+var Twit = require('twit');
+var twitter = new Twit({
+  consumer_key: process.env.TWITTER_CONSUMER_KEY2,
+  consumer_secret: process.env.TWITTER_CONSUMER_SECRET2,
+  access_token: process.env.TWITTER_ACCESS_TOKEN2,
+  access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET2
+});
 
 router.get('/', function(req, res) {
-  io.on('connect', function(socket) {
+  io.on('connection', function(socket) {
+    io.use("transports", ["xhr-polling"]);
+    io.set("polling duration", 20);
     socket.on("stop", function(){
       console.log("stop received");
         stream1.stop();
@@ -73,14 +83,5 @@ router.get('/', function(req, res) {
 
 app.use('/', router);
 
-//var io = require('socket.io').listen(server);
-var io   = require('socket.io')(server);
-var Twit = require('twit');
-var twitter = new Twit({
-  consumer_key: process.env.TWITTER_CONSUMER_KEY2,
-  consumer_secret: process.env.TWITTER_CONSUMER_SECRET2,
-  access_token: process.env.TWITTER_ACCESS_TOKEN2,
-  access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET2
-});
 
 server.listen(port);
