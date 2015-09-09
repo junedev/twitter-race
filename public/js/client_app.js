@@ -35,9 +35,8 @@ Score.$inject = ["$firebaseArray","FIREBASE_URL"];
 function Score($firebaseArray,FIREBASE_URL){
   var ref = new Firebase(FIREBASE_URL);
   var scores = $firebaseArray(ref.child("scores"));
-
   var Score = {};
-
+  
   Score.all = scores;
 
   Score.create = function(score){
@@ -92,15 +91,6 @@ function MainController(socket,$http,$window,Score){
       if(self.status === 2){
         self.status++;
         self.startCountdown();
-        $window.setTimeout(function() {
-          socket.emit('stop');
-          self.status = 5;
-          $window.clearInterval(intervalID);
-        Score.create({
-          1:[self.searchTerms.search1,self.counter1],
-          2:[self.searchTerms.search2,self.counter2]
-        })
-      }, 15000);
       }
     } else {
       self.counter2++;
@@ -116,15 +106,6 @@ function MainController(socket,$http,$window,Score){
       if(self.status === 2){
         self.status++;
         self.startCountdown();
-        $window.setTimeout(function() {
-          socket.emit('stop');
-          self.status = 5;
-          $window.clearInterval(intervalID);
-          Score.create({
-            1:[self.searchTerms.search1,self.counter1],
-            2:[self.searchTerms.search2,self.counter2]
-          })
-      }, 15000);
       }
     } else {
       self.counter1++;
@@ -148,6 +129,15 @@ function MainController(socket,$http,$window,Score){
     intervalID = $window.setInterval(function() {
       self.countdown--;
     }, 1000);
+    $window.setTimeout(function() {
+      socket.emit('stop');
+      self.status = 5;
+      $window.clearInterval(intervalID);
+      Score.create({
+        1:[self.searchTerms.search1,self.counter1],
+        2:[self.searchTerms.search2,self.counter2]
+      })
+    }, 15000);
   }
 
 }
