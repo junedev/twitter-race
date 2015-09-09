@@ -1,0 +1,16 @@
+{
+  "name": "twitter-race",
+  "version": "0.0.0",
+  "homepage": "https://github.com/junedev/twitter-race",
+  "authors": [
+    "junedev <catherinejune86@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

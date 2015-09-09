@@ -1,0 +1,78 @@
+.profile-img {
+  margin-right: 10px;
+  margin-bottom: 5px;
+  width: 70px;
+  height: auto;
+}
+
+.tweet-text {
+  margin-top: -5px;
+}
+
+.title {
+  padding-left: 10px;
+}
+
+.bar {
+  position: absolute;
+  background-color: darken(#D9F4FF,10%);
+  bottom: 0;
+  width: 100px;
+}
+
+.bar-left {
+  left: 25px;
+}
+
+.bar-right {
+  right: 25px;
+}
+
+.graph {
+  height: 340px;
+  width: 150px;
+  margin: 0 auto;
+  position: relative;
+  border-bottom: 1px solid darken($twitter,15%);
+}
+
+.left-text, .right-text {
+  width: 150px;
+  clear:both;
+
+}
+
+.relative-pos {
+  position: relative;
+}
+
+h1, h2, h3 {
+  color: darken($twitter,15%);
+  font-family: 'Quantico', sans-serif;
+}
+
+form {
+  margin-top: 150px;
+}
+
+.margin-top {
+  margin-top: 25px;
+}
+
+button {
+  width: 145px;
+}
+
+.countdown {
+  height: 70px;
+  width: 70px;
+  margin: 0 auto;
+  margin-top: 160px;
+  border-radius: 50%;
+  background-color: #F1FBFF;
+  border: 1px solid darken(#F1FBFF,10%);
+  .countdown-text {
+    font-family: "Courier New", Courier, monospace;
+    margin-top: 8px;
+  }
+}
