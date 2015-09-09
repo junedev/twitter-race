@@ -54,7 +54,8 @@ MainController.$inject = ["socket","$http","$window","Score"]
 
 function MainController(socket,$http,$window,Score){
   var self = this;
-  var intervalID = null;
+  var intervalId = null;
+  var timeoutId = null;
   self.searchTerms = {};
   self.searchTermsCopy = {};
   self.tweets1 = [];
@@ -114,22 +115,27 @@ function MainController(socket,$http,$window,Score){
   });
 
   self.sendSearchTerm = function(){
+    timeoutId = $window.setTimeout(function() {
+      socket.emit('stop');
+      $window.location.href = "/";
+    }, 25000)
     socket.emit('search', self.searchTerms);
     self.searchTermsCopy = self.searchTerms;
   }
 
   self.restart = function(){
-    $window.location.href = $window.location.hostname;
+    $window.location.href = "/";
   }
 
   self.startCountdown = function(){
-    intervalID = $window.setInterval(function() {
+    $window.clearTimeout(timeoutId);
+    intervalId = $window.setInterval(function() {
       self.countdown--;
     }, 1000);
     $window.setTimeout(function() {
       socket.emit('stop');
       self.status = 5;
-      $window.clearInterval(intervalID);
+      $window.clearInterval(intervalId);
       Score.create({
         1:[self.searchTerms.search1,self.counter1],
         2:[self.searchTerms.search2,self.counter2]

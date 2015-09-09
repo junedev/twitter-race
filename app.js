@@ -28,30 +28,21 @@ app.use(sassMiddleware({
   express.static(__dirname + '/public')
 )
 
-var io   = require('socket.io')(server);
-var Twit = require('twit');
-var twitter = new Twit({
-  consumer_key: process.env.TWITTER_CONSUMER_KEY2,
-  consumer_secret: process.env.TWITTER_CONSUMER_SECRET2,
-  access_token: process.env.TWITTER_ACCESS_TOKEN2,
-  access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET2
-});
-
 router.get('/', function(req, res) {
-  io.on('connection', function(socket) {
-    io.use("transports", ["xhr-polling"]);
-    io.set("polling duration", 25);
-    socket.on("stop", function(){
-      stream1.stop();
-      stream2.stop();
-      stream1 = null;
-      stream2 = null;
+  io.on('connect', function(socket) {
+    socket.once("stop", function(){
+      if(stream1) {
+        stream1.stop();
+        stream1 = null;
+      }
+      if(stream2) {
+        stream2.stop();
+        stream2 = null;    
+      }
       currentSearch = null;
-      // socket.disconnect(true);
-      // socket.close();
     })
 
-    socket.on("search", function(searchTerms){
+    socket.once("search", function(searchTerms){
       if(!currentSearch && searchTerms){
         currentSearch = searchTerms;
         console.log(searchTerms);
@@ -83,5 +74,13 @@ router.get('/', function(req, res) {
 
 app.use('/', router);
 
+var io   = require('socket.io')(server);
+var Twit = require('twit');
+var twitter = new Twit({
+  consumer_key: process.env.TWITTER_CONSUMER_KEY2,
+  consumer_secret: process.env.TWITTER_CONSUMER_SECRET2,
+  access_token: process.env.TWITTER_ACCESS_TOKEN2,
+  access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET2
+});
 
 server.listen(port);
