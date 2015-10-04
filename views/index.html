@@ -4,8 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Twitter-Race</title>
+
   <link rel="stylesheet" href="/css/style.css">
   <link href='https://fonts.googleapis.com/css?family=Quantico:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+
   <script type="text/javascript" src="/js/vendor/jquery-2.1.4.js"></script>
   <script type="text/javascript" src="/js/vendor/foundation.js"></script>
   <script type="text/javascript" src="/js/vendor/firebase-2.2.2.js"></script>
@@ -13,75 +15,77 @@
   <script type="text/javascript" src="/js/vendor/angularfire-1.1.2.js"></script>
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 </head>
+
 <body ng-controller="MainController as main">
+
   <h1 class="text-center">Twitter Race</h1>
-  <div class="row">
-    <ul class="small-3 column no-bullet">
-      <h2 class="title">{{main.searchTermsCopy.search1}}</h2>
-      <li ng-repeat="tweet in main.tweets1" class="panel">
-        <img class="left profile-img" ng-src="{{tweet.profile_image_url}}">
-        <div class="tweet-text clearfix"><small>
-          <strong> {{tweet.name}} - @{{tweet.screen_name}} </strong>
-          <div class="text">{{tweet.text}}</div>
-        </small>
+
+  <form ng-submit="main.sendSearchTerm()" class="text-center" ng-if="false && main.status<0">
+    <div class="row">
+
+      <div class="large-offset-2 large-3 medium-5 small-12 column">
+        <input type="text" ng-model="main.searchTerms.search1" class="adjust-height">
       </div>
-    </li>
-  </ul>
-  <div class="small-6 column text-center">
-    <form ng-submit="main.sendSearchTerm()" class="text-center" ng-show="main.status<2">
-      <div class="row" data-equalizer>
-        <div class="small-5 column" data-equalizer-watch>
-          <input type="text" ng-model="main.searchTerms.search1">
-        </div>
-        <div class="small-2 column" data-equalizer-watch>vs.</div>
-        <div class="small-5 column" data-equalizer-watch>
-          <input type="text" ng-model="main.searchTerms.search2">
-        </div>
+
+      <div class="large-1 medium-2 small-12 column vs adjust-height">vs.</div>
+
+      <div class="large-3 medium-5 small-12 column">
+        <input type="text" ng-model="main.searchTerms.search2" class="adjust-height">
       </div>
-      <button type="submit" class="margin-top">Start</button>
-    </form>
-    <div class="row" ng-show="main.status>=2">
-      <div class="small-5 column margin-top">
-        <div class="graph right">
-        <p class="text-center">{{main.counter1}}</p>
-          <div class="bar bar-left" style="height:{{main.bar.left}}px"></div>
-        </div>
-          <h3 class="text-center right right-text">{{main.searchTermsCopy.search1}}</h3>
+
+      <div class="large-1 medium-12 column end">
+        <button type="submit" class="button expand start">Start</button>
       </div>
-      <div class="small-2 column" ng-show="(main.status>=2 && main.status<5)">
-      <div class="text-center countdown">
-      <h2 class="countdown-text">{{main.countdown}}</h2>
-      </div>
-      </div>
-      <div class="small-5 column margin-top">
-        <div class="graph left">
-        <p class="text-center">{{main.counter2}}</p>
-        <div class="bar bar-right" style="height:{{main.bar.right}}px"></div>
-        </div>
-          <h3 class="text-center left left-text">{{main.searchTermsCopy.search2}}</h3>
-      </div>
+
     </div>
-    <button ng-click="main.restart()" ng-show="main.status==5" class="margin-top">New Race</button>
-    <h2 class="text-center" ng-show="main.status==5">Race records</h2>
-    <ul class="no-bullet text-center" ng-show="main.status==5">
-      <li ng-repeat="score in main.scores track by $index">{{score[1][0]}} {{score[1][1]}} - {{score[2][1]}} {{score[2][0]}}</li>
+  </form>
+
+<!--   <div class="load-wrapp">
+    <div class="load-1">
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+  </div> -->
+
+  <div class="row" ng-if="true || main.status >= 0">
+
+    <ul class="small-3 column no-bullet">
+      <h2 class="title">{{main.searchTerms.search1}}</h2>
+      <li ng-repeat="tweetData in main.tweets1">
+        <tweet tweet-data="tweetData"></tweet>
+      </li>
     </ul>
-  </div>
-  <ul class="small-3 column no-bullet">
-    <h2 class="title">{{main.searchTermsCopy.search2}}</h2>
-    <li ng-repeat="tweet in main.tweets2" class="panel">
-      <img class="left profile-img" ng-src="{{tweet.profile_image_url}}">
-      <div class="tweet-text clearfix">
-        <small>
-          <strong> {{tweet.name}} - @{{tweet.screen_name}} </strong>
-          <div class="text">{{tweet.text}}</div>
-        </small>
+
+    <div class="small-6 column text-center">
+
+      <div class="countdown">
+        <h2 class="countdown-text">{{main.countdown}}:00</h2>
       </div>
-    </li>
-  </ul>
-</div>
+
+      <div class="row">
+      <bar bar-data="main.counter1" bar-label="{{main.searchTerms.search1}}" bar-height="main.bar.left"></bar>
+      <bar bar-data="main.counter2" bar-label="{{main.searchTerms.search2}}" bar-height="main.bar.right"></bar>
+
+      </div>
+      <button ng-click="main.restart()" ng-show="main.status==5" class="margin-top btn">New Race</button>
+      <h2 class="text-center" ng-show="main.status==5">Race records</h2>
+      <ul class="no-bullet text-center" ng-show="main.status==5">
+        <li ng-repeat="score in main.scores track by $index">{{score[1][0]}} {{score[1][1]}} - {{score[2][1]}} {{score[2][0]}}</li>
+      </ul>
+    </div>
+
+    <ul class="small-3 column no-bullet">
+      <h2 class="title">{{main.searchTerms.search2}}</h2>
+      <li ng-repeat="tweetData in main.tweets2">
+        <tweet tweet-data="tweetData"></tweet>
+      </li>
+    </ul>
+
+  </div>
 
 </body>
 <script>$(document).foundation();</script>
-<script type="text/javascript" src="/js/client_app.js"></script>
+<script type="text/javascript" src="/js/app.js"></script>
+<script type="text/javascript" src="/js/mainController.js"></script>
+<script type="text/javascript" src="/js/directives.js"></script>
 </html>

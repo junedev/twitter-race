@@ -1,69 +1,19 @@
-angular.module("twitterRace",["firebase"])
-.factory("socket", socket)
-.factory("Score",Score)
-.controller("MainController", MainController)
-.constant("FIREBASE_URL","https://twitter-race.firebaseio.com/");
+angular.module("twitterRace")
+.controller("MainController", MainController);
 
-socket.$inject = ["$rootScope"]
-
-function socket($rootScope){
-  var socket = io();
-  return {
-    on: function (eventName, callback) {
-      socket.on(eventName, function () {  
-        var args = arguments;
-        $rootScope.$apply(function () {
-          callback.apply(socket, args);
-        });
-      });
-    },
-    emit: function (eventName, data, callback) {
-      socket.emit(eventName, data, function () {
-        var args = arguments;
-        $rootScope.$apply(function () {
-          if (callback) {
-            callback.apply(socket, args);
-          }
-        });
-      })
-    }
-  };
-}
-
-Score.$inject = ["$firebaseArray","FIREBASE_URL"];
-
-function Score($firebaseArray,FIREBASE_URL){
-  var ref = new Firebase(FIREBASE_URL);
-  var scores = $firebaseArray(ref.child("scores"));
-  var Score = {};
-
-  Score.all = scores;
-
-  Score.create = function(score){
-    return scores.$add(score);
-  }
-
-  Score.delete = function(score){
-    return scores.$remove(score);
-  }
-
-  return Score;
-}
-
-MainController.$inject = ["socket","$http","$window","Score"]
+MainController.$inject = ["socket","$http","$window","Score"];
 
 function MainController(socket,$http,$window,Score){
   var self = this;
   var intervalId = null;
   var timeoutId = null;
-  self.searchTerms = {};
-  self.searchTermsCopy = {};
+  self.searchTerms = {search1:"London",search2:"Paris"};
   self.tweets1 = [];
   self.tweets2 = [];
-  self.status = 0;
-  self.counter1 = 0;
-  self.counter2 = 0;
-  self.bar = {};
+  self.status = -1;
+  self.counter1 = 30;
+  self.counter2 = 10;
+  self.bar = {left:300,right:100};
   self.countdown = 15;
   self.scores = Score.all;
 
@@ -115,6 +65,7 @@ function MainController(socket,$http,$window,Score){
   });
 
   self.sendSearchTerm = function(){
+    self.status = 0;
     timeoutId = $window.setTimeout(function() {
       socket.emit('stop');
       $window.location.href = "/";

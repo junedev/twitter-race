@@ -1,6 +1,13 @@
 @charset "UTF-8";
+@font-face {
+    font-family: 'digital';
+    src: url('../fonts/Lets-go-digital.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
 @import "settings";
 @import "../bower_components/foundation-sass/scss/normalize";
 @import "../bower_components/foundation-sass/scss/foundation";
 
+@import "loading";
 @import "custom_styles";
