@@ -1,19 +1,19 @@
 angular.module("twitterRace")
 .controller("MainController", MainController);
 
-MainController.$inject = ["socket","$http","$window","Score"];
+MainController.$inject = ["socket","$http","$window","Score","$scope"];
 
-function MainController(socket,$http,$window,Score){
+function MainController(socket,$http,$window,Score,$scope){
   var self = this;
   var intervalId = null;
   var timeoutId = null;
-  self.searchTerms = {search1:"London",search2:"Paris"};
+  self.searchTerms = {};
+  self.counter1 = 0;
+  self.counter2 = 0;
+  self.bar = {};
   self.tweets1 = [];
   self.tweets2 = [];
   self.status = -1;
-  self.counter1 = 30;
-  self.counter2 = 10;
-  self.bar = {left:300,right:100};
   self.countdown = 15;
   self.scores = Score.all;
 
@@ -34,35 +34,26 @@ function MainController(socket,$http,$window,Score){
     }
   }
 
-  socket.on('tweet2', function(tweet) {
-    if(self.status < 2){
-      self.status++;
-      if(self.status === 2){
+  function listenForTweets(name, array){
+    socket.on(name, function(tweet) {
+      if(self.status < 2){
         self.status++;
-        self.startCountdown();
+        if(self.status === 2){
+          self.status++;
+          self.startCountdown();
+        }
+      } else {
+        if(name==="tweet1") self.counter1++;
+        if(name==="tweet2") self.counter2++;
+        array.unshift(tweet);
+        if (array.length > 10) self.tweets2.pop();
       }
-    } else {
-      self.counter2++;
-      self.tweets2.unshift(tweet);
-      if (self.tweets2.length > 10) self.tweets2.pop();
-    }
-    self.calc();
-  });
+      self.calc();
+    });
+  }
 
-  socket.on('tweet1', function(tweet) {
-    if(self.status < 2){
-      self.status++;
-      if(self.status === 2){
-        self.status++;
-        self.startCountdown();
-      }
-    } else {
-      self.counter1++;
-      self.tweets1.unshift(tweet);
-      if (self.tweets1.length > 10) self.tweets1.pop();
-    }
-    self.calc();
-  });
+  listenForTweets("tweet1", self.tweets1);
+  listenForTweets("tweet2", self.tweets2);
 
   self.sendSearchTerm = function(){
     self.status = 0;
@@ -82,16 +73,19 @@ function MainController(socket,$http,$window,Score){
     $window.clearTimeout(timeoutId);
     intervalId = $window.setInterval(function() {
       self.countdown--;
+      $scope.$apply();
     }, 1000);
     $window.setTimeout(function() {
-      socket.emit('stop');
+      self.countdown--;
+      $scope.$apply();
       self.status = 5;
+      socket.emit('stop');
       $window.clearInterval(intervalId);
       Score.create({
         1:[self.searchTerms.search1,self.counter1],
         2:[self.searchTerms.search2,self.counter2]
       })
-    }, 15000);
+    }, self.countdown*1000);
   }
 
 }

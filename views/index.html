@@ -18,64 +18,75 @@
 
 <body ng-controller="MainController as main">
 
-  <h1 class="text-center">Twitter Race</h1>
+  <div class="row" ng-if="main.status < 0">
+    <div class="small-12 column text-center">
 
-  <form ng-submit="main.sendSearchTerm()" class="text-center" ng-if="false && main.status<0">
-    <div class="row">
+      <h1 class="text-center">Twitter Race</h1>
+      <img src="/images/race_crop.png" alt="Screenshot" class="start-img">
+      <h4 class="subtitle">Start your race now and it will count all live tweets within the next 15 seconds. Bet with friends on which search term gets more tweets.</h4>
+      <form ng-submit="main.sendSearchTerm()" class="text-center">
 
-      <div class="large-offset-2 large-3 medium-5 small-12 column">
-        <input type="text" ng-model="main.searchTerms.search1" class="adjust-height">
+        <div class="row">
+          <div class="large-offset-2 large-3 medium-5 small-12 column">
+            <input type="text" ng-model="main.searchTerms.search1" class="adjust-height">
+          </div>
+
+          <div class="large-2 medium-2 small-12 column vs adjust-height">vs.</div>
+
+          <div class="large-3 medium-5 small-12 column end">
+            <input type="text" ng-model="main.searchTerms.search2" class="adjust-height">
+          </div>
+        </div>
+        <button type="submit" class="button expand start">Start the race</button>
+
+      </form>
+
+    </div>
+  </div>
+
+  <div class="row" ng-if="main.status >= 0">
+
+    <div class="medium-6 medium-push-3 small-12 column text-center main-box">
+
+      <div class="countdown">
+        <h2 class="countdown-text" ng-if="main.status>=2">{{("0"+main.countdown).slice(-2)}}:00</h2>
+        <h4 ng-if="main.status<2">Waiting for tweets to come through ...</h4>
       </div>
 
-      <div class="large-1 medium-2 small-12 column vs adjust-height">vs.</div>
-
-      <div class="large-3 medium-5 small-12 column">
-        <input type="text" ng-model="main.searchTerms.search2" class="adjust-height">
+      <div class="row" ng-if="main.status>=2">
+        <bar bar-data="main.counter1" bar-label="{{main.searchTerms.search1}}" bar-height="main.bar.left" class="middle"></bar>
+        <bar bar-data="main.counter2" bar-label="{{main.searchTerms.search2}}" bar-height="main.bar.right"></bar>
       </div>
 
-      <div class="large-1 medium-12 column end">
-        <button type="submit" class="button expand start">Start</button>
+      <div class="row" ng-if="main.status<2">
+        <div class="load-wrapp">
+          <fakebar bar-label="{{main.searchTerms.search1}}" class="line1"></fakebar>
+          <fakebar bar-label="{{main.searchTerms.search2}}" class="line2"></fakebar>
+        </div>
+      </div>
+
+      <div ng-if="main.status==5">
+        <button ng-click="main.restart()" class="restart">Start new Race</button>
+        <h2 class="text-center" >Previous Race Outcomes</h2>
+        <div class="scores">
+          <div class="row" ng-repeat="score in main.scores | orderBy:'$index':true| limitTo:20" >
+            <div class="small-6 column text-right">{{score[1][0]}} {{score[1][1]}} &nbsp;- </div>
+            <div class="small-6 column text-left">&nbsp;&nbsp;{{score[2][1]}} {{score[2][0]}}</div>
+          </div>
+        </div>
       </div>
 
     </div>
-  </form>
 
-<!--   <div class="load-wrapp">
-    <div class="load-1">
-        <div class="line"></div>
-        <div class="line"></div>
-    </div>
-  </div> -->
-
-  <div class="row" ng-if="true || main.status >= 0">
-
-    <ul class="small-3 column no-bullet">
-      <h2 class="title">{{main.searchTerms.search1}}</h2>
+    <ul class="medium-3 medium-pull-6 small-6 column no-bullet">
+      <h2 class="title">{{main.searchTerms.search1}} tweets</h2>
       <li ng-repeat="tweetData in main.tweets1">
         <tweet tweet-data="tweetData"></tweet>
       </li>
     </ul>
 
-    <div class="small-6 column text-center">
-
-      <div class="countdown">
-        <h2 class="countdown-text">{{main.countdown}}:00</h2>
-      </div>
-
-      <div class="row">
-      <bar bar-data="main.counter1" bar-label="{{main.searchTerms.search1}}" bar-height="main.bar.left"></bar>
-      <bar bar-data="main.counter2" bar-label="{{main.searchTerms.search2}}" bar-height="main.bar.right"></bar>
-
-      </div>
-      <button ng-click="main.restart()" ng-show="main.status==5" class="margin-top btn">New Race</button>
-      <h2 class="text-center" ng-show="main.status==5">Race records</h2>
-      <ul class="no-bullet text-center" ng-show="main.status==5">
-        <li ng-repeat="score in main.scores track by $index">{{score[1][0]}} {{score[1][1]}} - {{score[2][1]}} {{score[2][0]}}</li>
-      </ul>
-    </div>
-
-    <ul class="small-3 column no-bullet">
-      <h2 class="title">{{main.searchTerms.search2}}</h2>
+    <ul class="medium-3 small-6 column no-bullet">
+      <h2 class="title">{{main.searchTerms.search2}} tweets</h2>
       <li ng-repeat="tweetData in main.tweets2">
         <tweet tweet-data="tweetData"></tweet>
       </li>

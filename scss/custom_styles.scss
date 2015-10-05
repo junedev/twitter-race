@@ -39,7 +39,7 @@
   position: relative;
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4 {
   color: darken($twitter,15%);
   font-family: 'Quantico', sans-serif;
 }
@@ -48,8 +48,12 @@ h1 {
   padding-top: 20px;
 }
 
+body, button[type=submit] {
+  font-family: 'Quantico', sans-serif;
+}
+
 form {
-  margin-top: 150px;
+  margin-top: 40px;
 }
 
 .margin-top {
@@ -77,9 +81,48 @@ form {
   }
 }
 
+.badge {
+  display: inline-block;
+  color: white;
+  background-color: darken($twitter,15%);
+  font-weight: bold;
+  font-family: "digital";
+  font-size: 25px;
+  line-height: 25px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  text-align: center;
+  width: 50px;
+}
+
+.scores{
+  margin-bottom: 25px;
+  .column {
+    padding: 0;
+  }
+}
+
+.start-img {
+  padding: 10px;
+  border: 1px solid darken($twitter,15%);
+  width: 100%;
+  max-width: 600px;
+  margin: 25px auto;
+}
+
+.start, .subtitle {
+  max-width: 600px !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 @media only screen and (max-width: 64em){
-  .start {
+  .start, .restart {
     margin-top: 25px;
+  }
+
+  .restart {
+    width: 100%;
   }
 }
 
@@ -89,6 +132,18 @@ form {
   }
   
   .start {
+    height: 50px;
     line-height: 20px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+
+  .middle {
+    border-right: 1px solid darken($twitter,15%);
+  }
+
+  .restart {
+    margin-top: 50px;
+    width: 72%;
   }
 }
