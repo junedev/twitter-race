@@ -1,11 +1,14 @@
 angular.module("twitterRace",["firebase"])
-.factory("socket", socket)
-.factory("Score",Score)
+.factory("socket", socketFactory)
+.factory("Score",ScoreFactory)
 .constant("FIREBASE_URL","https://twitter-race.firebaseio.com/");
 
-socket.$inject = ["$rootScope"]
+// Source for how to wrap up socket.io:
+// https://www.fenixapps.com/blog/nodejs-angularjs-and-socket-io/
 
-function socket($rootScope){
+socketFactory.$inject = ["$rootScope"];
+
+function socketFactory($rootScope){
   var socket = io();
   return {
     on: function (eventName, callback) {
@@ -24,14 +27,14 @@ function socket($rootScope){
             callback.apply(socket, args);
           }
         });
-      })
+      });
     }
   };
 }
 
-Score.$inject = ["$firebaseArray","FIREBASE_URL"];
+ScoreFactory.$inject = ["$firebaseArray","FIREBASE_URL"];
 
-function Score($firebaseArray,FIREBASE_URL){
+function ScoreFactory($firebaseArray,FIREBASE_URL){
   var ref = new Firebase(FIREBASE_URL);
   var scores = $firebaseArray(ref.child("scores"));
   var Score = {};
@@ -40,11 +43,11 @@ function Score($firebaseArray,FIREBASE_URL){
 
   Score.create = function(score){
     return scores.$add(score);
-  }
+  };
 
   Score.delete = function(score){
     return scores.$remove(score);
-  }
+  };
 
   return Score;
 }

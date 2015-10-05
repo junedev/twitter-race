@@ -1,3 +1,7 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
 .profile-img {
   margin-right: 10px;
   margin-bottom: 5px;
@@ -29,12 +33,6 @@
   border-bottom: 1px solid darken($twitter,15%);
 }
 
-.left-text, .right-text {
-  width: 150px;
-  clear:both;
-
-}
-
 .relative-pos {
   position: relative;
 }
@@ -48,7 +46,7 @@ h1 {
   padding-top: 20px;
 }
 
-body, button[type=submit] {
+body, button[type=submit], button {
   font-family: 'Quantico', sans-serif;
 }
 
@@ -58,10 +56,6 @@ form {
 
 .margin-top {
   margin-top: 25px;
-}
-
-.btn {
-  width: 145px;
 }
 
 .adjust-height, input.adjust-height {
@@ -92,7 +86,7 @@ form {
   padding: 5px 10px;
   border-radius: 50%;
   text-align: center;
-  width: 50px;
+  width: 60px;
 }
 
 .scores{
@@ -127,11 +121,11 @@ form {
 }
 
 @media only screen and (min-width: 64.063em){
-  form, .start, input[type=text] {
+  form, .start, .restart, input[type=text] {
     font-size: 25px;
   }
   
-  .start {
+  .start, {
     height: 50px;
     line-height: 20px;
     margin-top: 50px;
@@ -145,5 +139,7 @@ form {
   .restart {
     margin-top: 50px;
     width: 72%;
+    height: 50px;
+    line-height: 20px;
   }
 }

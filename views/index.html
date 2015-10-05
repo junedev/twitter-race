@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js" ng-app="twitterRace">
+<html lang="en" class="no-js" ng-cloak ng-app="twitterRace">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,7 +47,8 @@
   <div class="row" ng-if="main.status >= 0">
 
     <div class="medium-6 medium-push-3 small-12 column text-center main-box">
-
+    
+      <h1 class="text-center">Twitter Race</h1>
       <div class="countdown">
         <h2 class="countdown-text" ng-if="main.status>=2">{{("0"+main.countdown).slice(-2)}}:00</h2>
         <h4 ng-if="main.status<2">Waiting for tweets to come through ...</h4>

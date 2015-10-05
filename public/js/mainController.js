@@ -24,15 +24,15 @@ function MainController(socket,$http,$window,Score,$scope){
         self.bar = {
           left: 300,
           right: 300*self.counter2/self.counter1
-        }
+        };
       } else {
         self.bar = {
           left: 300*self.counter1/self.counter2,
           right: 300
-        }
+        };
       }
     }
-  }
+  };
 
   function listenForTweets(name, array){
     socket.on(name, function(tweet) {
@@ -46,7 +46,7 @@ function MainController(socket,$http,$window,Score,$scope){
         if(name==="tweet1") self.counter1++;
         if(name==="tweet2") self.counter2++;
         array.unshift(tweet);
-        if (array.length > 10) self.tweets2.pop();
+        if (array.length > 10) array.pop();
       }
       self.calc();
     });
@@ -60,14 +60,14 @@ function MainController(socket,$http,$window,Score,$scope){
     timeoutId = $window.setTimeout(function() {
       socket.emit('stop');
       $window.location.href = "/";
-    }, 25000)
+    }, 25000);
     socket.emit('search', self.searchTerms);
     self.searchTermsCopy = self.searchTerms;
-  }
+  };
 
   self.restart = function(){
     $window.location.href = "/";
-  }
+  };
 
   self.startCountdown = function(){
     $window.clearTimeout(timeoutId);
@@ -84,8 +84,8 @@ function MainController(socket,$http,$window,Score,$scope){
       Score.create({
         1:[self.searchTerms.search1,self.counter1],
         2:[self.searchTerms.search2,self.counter2]
-      })
+      });
     }, self.countdown*1000);
-  }
+  };
 
 }

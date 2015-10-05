@@ -10,7 +10,7 @@ function tweetDirective(){
   directive.templateUrl = "./js/templates/_tweet.html";
   directive.scope = {
     tweetData: "="
-  }
+  };
 
   return directive;
 }
@@ -24,7 +24,7 @@ function barDirective(){
     barData: "=",
     barLabel: "@",
     barHeight: "="
-  }
+  };
 
   return directive;
 }
@@ -36,7 +36,7 @@ function FakeBarDirective(){
   directive.templateUrl = "./js/templates/_fake-bar.html";
   directive.scope = {
     barLabel: "@"
-  }
+  };
 
   return directive;
 }
