@@ -10,6 +10,7 @@ var server  = require('http').createServer(app);
 var stream1 = null;
 var stream2 = null;
 var currentSearch = null;
+
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
@@ -45,24 +46,13 @@ router.get('/', function(req, res) {
     socket.once("search", function(searchTerms){
       if(!currentSearch && searchTerms){
         currentSearch = searchTerms;
-        console.log(searchTerms);
         stream1 = twitter.stream('statuses/filter', { track: searchTerms.search1 });
         stream2 = twitter.stream('statuses/filter', { track: searchTerms.search2 });
         stream1.on('tweet', function(tweet) {
-          var data = {};
-          data.name = tweet.user.name;
-          data.screen_name = tweet.user.screen_name;
-          data.text = tweet.text;
-          data.profile_image_url = tweet.user.profile_image_url;
-          socket.emit('tweet1', data);
+          socket.emit('tweet1', formatTweetData(tweet));
         });
         stream2.on('tweet', function(tweet) {
-          var data = {};
-          data.name = tweet.user.name;
-          data.screen_name = tweet.user.screen_name;
-          data.text = tweet.text;
-          data.profile_image_url = tweet.user.profile_image_url;
-          socket.emit('tweet2', data);
+          socket.emit('tweet2', formatTweetData(tweet));
         });
       }
     });
@@ -70,7 +60,6 @@ router.get('/', function(req, res) {
   });
   res.render('index.html');
 });
-
 
 app.use('/', router);
 
@@ -87,3 +76,12 @@ server.listen(port, function(err){
   if(err) console.log(err);
   console.log("Twitter Race running on port "+port);
 });
+
+function formatTweetData(tweet){
+  var data = {};
+  data.name = tweet.user.name;
+  data.screen_name = tweet.user.screen_name;
+  data.text = tweet.text;
+  data.profile_image_url = tweet.user.profile_image_url;
+  return data;
+}
