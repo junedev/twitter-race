@@ -83,4 +83,7 @@ var twitter = new Twit({
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET2
 });
 
-server.listen(port);
+server.listen(port, function(err){
+  if(err) console.log(err);
+  console.log("Twitter Race running on port "+port);
+});
