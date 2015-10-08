@@ -1,7 +1,6 @@
 var morgan  = require('morgan');
 var express = require('express');
 var bodyParser = require("body-parser");
-var ejs = require("ejs");
 var sassMiddleware = require('node-sass-middleware');
 var app     = express();
 var port    = process.env.PORT || 9000;
@@ -24,7 +23,7 @@ app.use(sassMiddleware({
   dest: __dirname + '/public/css',
   debug: true,
   outputStyle: 'compressed',
-  prefix: "/css"
+  prefix: '/css'
   }),
   express.static(__dirname + '/public')
 )

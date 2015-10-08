@@ -68,9 +68,9 @@
 
       <div ng-if="main.status==5">
         <button ng-click="main.restart()" class="restart">Start new Race</button>
-        <h2 class="text-center" >Previous Race Outcomes</h2>
+        <h2 class="text-center">Previous Race Outcomes</h2>
         <div class="scores">
-          <div class="row" ng-repeat="score in main.scores | orderBy:'$index':true| limitTo:20" >
+          <div class="row" ng-repeat="score in main.scores | orderBy:'$index':true | limitTo:20" >
             <div class="small-6 column text-right">{{score[1][0]}} {{score[1][1]}} &nbsp;- </div>
             <div class="small-6 column text-left">&nbsp;&nbsp;{{score[2][1]}} {{score[2][0]}}</div>
           </div>

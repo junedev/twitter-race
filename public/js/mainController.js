@@ -17,7 +17,7 @@ function MainController(socket,$http,$window,Score,$scope){
   self.countdown = 15;
   self.scores = Score.all;
 
-  self.calc = function(){
+  self.calcBarHeight = function(){
     self.bar = {left: self.counter1*10, right: self.counter2*10};
     if(self.counter1 > 30 || self.counter2 > 30){
       if(self.counter1>self.counter2){
@@ -48,7 +48,7 @@ function MainController(socket,$http,$window,Score,$scope){
         array.unshift(tweet);
         if (array.length > 10) array.pop();
       }
-      self.calc();
+      self.calcBarHeight();
     });
   }
 
@@ -62,7 +62,6 @@ function MainController(socket,$http,$window,Score,$scope){
       $window.location.href = "/";
     }, 25000);
     socket.emit('search', self.searchTerms);
-    self.searchTermsCopy = self.searchTerms;
   };
 
   self.restart = function(){

@@ -4,7 +4,7 @@ angular.module("twitterRace",["firebase"])
 .constant("FIREBASE_URL","https://twitter-race.firebaseio.com/");
 
 // Source for how to wrap up socket.io:
-// https://www.fenixapps.com/blog/nodejs-angularjs-and-socket-io/
+// http://www.html5rocks.com/en/tutorials/frameworks/angular-websockets/
 
 socketFactory.$inject = ["$rootScope"];
 
