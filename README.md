@@ -4,7 +4,7 @@
 
 http://twitter-race.herokuapp.com/
 
-![Screenshot](./images/race.png)
+![Screenshot](./public/images/race.png)
 
 ## Description
 You are discussing popularity of something with friends? You are willing to bet them a beer? Use <a href="{{page.website}}" target="_blanck">Twitter-Race</a> to determine the winner. The app allows you two enter two search words. Then it starts counting all the tweets that appear on Twitter with those words for 15 seconds and shows the score. You can see the tweets coming in and the counter in real time. Additionally you can view results of races other people have done recently.
